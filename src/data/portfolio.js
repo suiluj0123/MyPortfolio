@@ -8,7 +8,7 @@ export const portfolioData = {
       "/profile8.png"
     ],
     email: "anunciadosuiluj012@gmail.com  ",
-    github: "https://github.com/suiluj0123",
+    github: "https://github.com/suiluj0123?tab=repositories",
     linkedin: "https://www.linkedin.com/in/suiluj-anunciado-308107405/",
     instagram: "https://instagram.com"
   },

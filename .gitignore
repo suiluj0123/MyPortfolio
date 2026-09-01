@@ -40,5 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# trustelect
-/trustelect
+# images & assets
+/public/trustelect
+/public/freshcart
+/public/certificates
+/public/profile8.png
