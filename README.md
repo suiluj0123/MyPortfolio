@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Suiluj Anunciado
 
-## Getting Started
+**Software Engineer & Full-Stack Developer**
 
-First, run the development server:
+Fresh BSIT graduate from STI College Novaliches. I build full-stack web apps and enjoy integrating AI into real projects. My capstone project TrustElect won Best Capstone Project, and I completed a software engineering internship where I helped ship a cross-platform mobile app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Area | Technologies |
+|------|-------------|
+| **Frontend** | HTML5, CSS, JavaScript, React.js, Next.js, Tailwind CSS, TypeScript |
+| **Backend** | Node.js, Python, Express.js, PostgreSQL, MySQL, Supabase |
+| **AI** | Google Gemini API, OpenAI, Anthropic, Prompt Engineering |
+| **Tools** | Git, GitHub, VS Code, Vercel, Postman |
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Education
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Bachelor of Science in Information Technology (BSIT)** — STI College Novaliches *(2022–2026)*
+- **TVL-ICT** — Gardner College Diliman *(2020–2022)*
 
-## Learn More
+## Highlights
 
-To learn more about Next.js, take a look at the following resources:
+- Best Capstone Project Award
+- Software Engineering Intern at CMV Software Development Corp.
+- Lead Developer of TrustElect — a secure web-based voting system
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Email:** anunciadosuiluj012@gmail.com
+- **LinkedIn:** [linkedin.com/in/suiluj-anunciado](https://www.linkedin.com/in/suiluj-anunciado-308107405/)
+- **GitHub:** [github.com/suiluj0123](https://github.com/suiluj0123)
