@@ -562,16 +562,15 @@ export const portfolioData = {
         }
       ],
       keyFeatures: [
-        "Encrypted ballot submission with candidate selection progress bar and review before submitting.",
+        "Led a team to build a secure voting website for 3,000+ students using Next.js, Node.js, and PostgreSQL.",
+        "Created a system to count votes in real time, replacing slow manual counting with instant results.",
+        "Protected voter identities and encrypted ballots to prevent vote tampering.",
+        "Developed a secure login system using one-time passwords (OTP) sent via email and SMS.",
+        "Restricted voting access so students can only vote from authorized campus computer labs using IP verification.",
         "Printable vote receipts with unique Receipt IDs and 6-character verification codes for audit proof.",
         "Role-Based Access Control (RBAC) to set specific permissions for admins and staff.",
-        "Voter eligibility rules based on student course, year level, semester, and designated lab precinct.",
-        "System Maintenance module to easily manage courses, election types, year levels, semesters, precincts, and partylists.",
         "Built-in Content Management System (CMS) to update logos, carousel banners, feature cards, and theme colors.",
-        "Reports module with downloadable PDF and CSV exports for voter turnout, vote counts, and activity audit logs.",
-        "Student masterlist management with course distribution stats and batch CSV upload/archive options.",
-        "Two-factor security combining JWT login sessions and email One-Time Password (OTP) verification.",
-        "Campus IP restriction logic to make sure voting only takes place inside authorized school computer laboratories."
+        "Reports module with downloadable PDF and CSV exports for voter turnout, vote counts, and activity audit logs."
       ]
     }
   ],
