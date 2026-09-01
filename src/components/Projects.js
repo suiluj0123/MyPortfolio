@@ -3,12 +3,10 @@
 import React, { useState } from "react";
 import { portfolioData } from "../data/portfolio";
 import ProjectFullViewModal from "./ProjectFullViewModal";
-import MobileSimulator from "./MobileSimulator";
 
 export default function Projects({ sectionRef }) {
   const [projectIndex, setProjectIndex] = useState(0);
   const [selectedProjectForFullView, setSelectedProjectForFullView] = useState(null);
-  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
 
   const getDeckClass = (idx) => {
     const total = portfolioData.projects.length;
@@ -25,7 +23,6 @@ export default function Projects({ sectionRef }) {
     if (currentClass !== "is-center") {
       setProjectIndex(idx);
     } else {
-      // Center card clicked -> open full view modal!
       setSelectedProjectForFullView(portfolioData.projects[idx]);
     }
   };
@@ -80,7 +77,6 @@ export default function Projects({ sectionRef }) {
         {portfolioData.projects.map((proj, idx) => {
           const currentClass = getDeckClass(idx);
           const isCenter = currentClass === "is-center";
-          const isBakas = proj.title.toLowerCase().includes("bakas");
 
           return (
             <article
@@ -134,19 +130,26 @@ export default function Projects({ sectionRef }) {
                   {proj.description}
                 </p>
 
-                {/* Previews Thumbnail Mini-Strip */}
+                {/* Previews Thumbnail Mini-Strip (Uniform across all cards) */}
                 {proj.previews && proj.previews.length > 0 && (
                   <div className="mt-3.5 pt-3 border-t border-dashed border-[color:rgb(var(--g200))]">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="font-mono text-[10px] uppercase text-[color:rgb(var(--g500))]">
-                        Previews ({proj.previews.length})
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-[10px] uppercase text-[color:rgb(var(--g500))]">
+                          Previews ({proj.previews.length})
+                        </span>
+                        {proj.modules && proj.modules.length > 0 && (
+                          <span className="font-mono text-[9px] bg-[color:rgb(var(--g100))] text-[color:rgb(var(--g600))] px-1.5 py-0.2 rounded font-medium">
+                            {proj.modules.length} Modules
+                          </span>
+                        )}
+                      </div>
                       <span className="font-mono text-[10px] text-[color:rgb(var(--ink))] hover:underline">
                         View all ↗
                       </span>
                     </div>
                     <div className="grid grid-cols-3 gap-1.5">
-                      {proj.previews.map((prevImg, pIdx) => (
+                      {proj.previews.slice(0, 3).map((prevImg, pIdx) => (
                         <div
                           key={pIdx}
                           className="group/strip relative aspect-video overflow-hidden rounded border border-[color:rgb(var(--g200))] hover:border-[color:rgb(var(--g400))] transition-all"
@@ -156,6 +159,11 @@ export default function Projects({ sectionRef }) {
                             alt={prevImg.title}
                             className="h-full w-full object-cover object-top transition-transform group-hover/strip:scale-105"
                           />
+                          {pIdx === 2 && proj.previews.length > 3 && (
+                            <div className="absolute inset-0 bg-black/60 backdrop-blur-2xs flex items-center justify-center text-white font-mono text-[10px] font-bold">
+                              +{proj.previews.length - 3}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -180,19 +188,6 @@ export default function Projects({ sectionRef }) {
                     </svg>
                     Live Demo
                   </a>
-                )}
-
-                {isBakas && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsSimulatorOpen(true);
-                    }}
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-1.5 rounded hover:bg-emerald-500/20 transition-all cursor-pointer"
-                  >
-                    📱 Simulator
-                  </button>
                 )}
 
                 {proj.githubUrl && proj.githubUrl !== "#" && (
@@ -265,13 +260,7 @@ export default function Projects({ sectionRef }) {
           project={selectedProjectForFullView}
           onNext={handleNextProject}
           onPrev={handlePrevProject}
-          onOpenSimulator={() => setIsSimulatorOpen(true)}
         />
-      )}
-
-      {/* Bakas Mobile Phone Simulator */}
-      {isSimulatorOpen && (
-        <MobileSimulator onClose={() => setIsSimulatorOpen(false)} />
       )}
     </section>
   );

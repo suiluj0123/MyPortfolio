@@ -23,25 +23,17 @@ export default function Education({ sectionRef }) {
           >
             {/* Header with Degree & Period */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[color:rgb(var(--g100))] border border-[color:rgb(var(--g200))] text-sm">
-                  🎓
-                </span>
-                <div>
-                  <h3 className="font-['Geist_Pixel'] text-base text-[color:rgb(var(--ink))]">
+              <div>
+                  <h3 className="font-['Geist_Pixel'] text-xs text-[color:rgb(var(--ink))]">
                     {edu.degree}
                   </h3>
-                  <p className="font-mono text-xs font-medium text-[color:rgb(var(--g600))]">
+                  <p className="font-mono text-xs font-bold text-[color:rgb(var(--g600))]">
                     {edu.institution} {edu.location && `• ${edu.location}`}
                   </p>
                 </div>
-              </div>
 
               <div className="flex items-center gap-2 self-start sm:self-center">
-                <span className="inline-flex items-center rounded-md bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 font-mono text-[10px] uppercase text-emerald-600 dark:text-emerald-400">
-                  {edu.status || "Graduated"}
-                </span>
-                <span className="font-mono text-xs text-[color:rgb(var(--g500))]">
+                <span className="font-mono text-xs font-bold text-[color:rgb(var(--g500))]">
                   {edu.period}
                 </span>
               </div>

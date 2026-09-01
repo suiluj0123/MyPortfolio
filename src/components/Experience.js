@@ -2,11 +2,9 @@
 
 import React, { useState } from "react";
 import { portfolioData } from "../data/portfolio";
-import MobileSimulator from "./MobileSimulator";
 
 export default function Experience({ sectionRef }) {
   const [expandedExperience, setExpandedExperience] = useState(0);
-  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
 
   return (
     <section id="experience" ref={sectionRef} className="py-12 scroll-mt-6">
@@ -22,7 +20,6 @@ export default function Experience({ sectionRef }) {
       <div className="flex flex-col gap-4">
         {portfolioData.experiences.map((exp, idx) => {
           const isExpanded = expandedExperience === idx;
-          const isBakas = exp.company.includes("CMV") || exp.role.includes("Flutter") || (exp.details?.subtitle && exp.details.subtitle.includes("Bakas"));
 
           return (
             <div
@@ -73,23 +70,6 @@ export default function Experience({ sectionRef }) {
                         {exp.details.subtitle}
                       </p>
 
-                      {/* Interactive Simulator Trigger for Bakas */}
-                      {isBakas && (
-                        <div className="my-1">
-                          <button
-                            type="button"
-                            onClick={() => setIsSimulatorOpen(true)}
-                            className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 font-mono text-xs text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer shadow-sm hover:scale-[1.01]"
-                          >
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            📱 Launch Interactive Bakas App Simulator ➔
-                          </button>
-                        </div>
-                      )}
-
                       {exp.skills && (
                         <div>
                           <span className="font-mono text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold block mb-1.5">
@@ -139,11 +119,6 @@ export default function Experience({ sectionRef }) {
           );
         })}
       </div>
-
-      {/* Interactive Bakas Mobile Phone Simulator */}
-      {isSimulatorOpen && (
-        <MobileSimulator onClose={() => setIsSimulatorOpen(false)} />
-      )}
     </section>
   );
 }

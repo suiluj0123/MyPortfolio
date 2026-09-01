@@ -4,20 +4,24 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { portfolioData } from "../../data/portfolio";
 import ImageModal from "../../components/ImageModal";
-import MobileSimulator from "../../components/MobileSimulator";
 
 export default function ProjectsPage() {
-  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
   const [modalState, setModalState] = useState({
     isOpen: false,
     images: [],
     initialIndex: 0
   });
 
-  const openLightbox = (proj, initialIdx = 0) => {
-    const imagesToDisplay = proj.previews && proj.previews.length > 0
-      ? proj.previews
-      : [{ title: proj.title, caption: proj.description, src: proj.imageUrl }];
+  const [activeModuleTabs, setActiveModuleTabs] = useState({});
+
+  const setProjectModuleTab = (projTitle, tabId) => {
+    setActiveModuleTabs((prev) => ({ ...prev, [projTitle]: tabId }));
+  };
+
+  const openLightbox = (imagesList, initialIdx = 0) => {
+    const imagesToDisplay = Array.isArray(imagesList) && imagesList.length > 0
+      ? imagesList
+      : [{ title: "Preview", caption: "", src: "" }];
 
     setModalState({
       isOpen: true,
@@ -78,7 +82,12 @@ export default function ProjectsPage() {
             <div className="flex items-center gap-4 mb-3">
               <button
                 type="button"
-                onClick={() => openLightbox(proj, 0)}
+                onClick={() => {
+                  const allScreens = proj.modules
+                    ? proj.modules.flatMap((m) => m.screenshots || [])
+                    : proj.previews || [];
+                  openLightbox(allScreens, 0);
+                }}
                 className="group/thumb relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g100))] hover:scale-105 transition-transform cursor-pointer"
                 title="Click to view full preview"
               >
@@ -93,43 +102,368 @@ export default function ProjectsPage() {
             </div>
 
             {/* Overview / Subtitle */}
-            <p className="text-sm leading-relaxed text-[color:rgb(var(--g600))] mb-6">
+            <p className="text-sm leading-relaxed text-[color:rgb(var(--g600))] mb-4">
               {proj.description}
             </p>
+
+            {/* Project Objective Callout */}
+            {proj.objective && (
+              <div className="mb-6 rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g50))] p-4 sm:p-5">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold block mb-1.5">
+                  Project Objective:
+                </span>
+                <p className="text-xs sm:text-[13px] text-[color:rgb(var(--g600))] leading-relaxed">
+                  {proj.objective}
+                </p>
+              </div>
+            )}
+
+            {/* AI Feature Spotlight */}
+            {proj.aiHighlight && (
+              <div className="mb-6 rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g50))] p-4 sm:p-5">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold">
+                    Generative AI Integration — {proj.aiHighlight.title}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-[13px] text-[color:rgb(var(--g600))] leading-relaxed">
+                  {proj.aiHighlight.summary}
+                </p>
+              </div>
+            )}
 
             {/* Divider */}
             <div className="h-px bg-dashed border-t border-[color:rgb(var(--g200))] my-6"></div>
 
             {/* Dynamic Features & Placeholders Section */}
             <div className="flex flex-col gap-6 font-mono text-xs text-[color:rgb(var(--g600))] leading-relaxed mb-6">
-              <div>
-                <span className="text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold block mb-1">
-                  Key Features:
-                </span>
-                <ul className="list-disc list-inside flex flex-col gap-1.5 pl-1 text-[color:rgb(var(--g600))] text-xs">
-                  {proj.keyFeatures ? (
-                    proj.keyFeatures.map((feat, fIdx) => (
-                      <li key={fIdx}>{feat}</li>
-                    ))
-                  ) : proj.title.includes("TrustElect") ? (
-                    <>
-                      <li>Interactive Candidate Administration Panel for quick management.</li>
-                      <li>Double-Voting prevention logic with absolute voter anonymity.</li>
-                      <li>Secure JWT session states coupled with One-Time Password (OTP) verification steps.</li>
-                      <li>IP origin verification restricting votes strictly to verified computer lab gateways.</li>
-                    </>
-                  ) : (
-                    <>
-                      <li>Real-time database integration mapping in-app client messaging.</li>
-                      <li>Flutter frontend components optimized for smooth, platform-independent mobile scaling.</li>
-                      <li>Secured transaction ledger logging key data variables locally.</li>
-                    </>
-                  )}
-                </ul>
-              </div>
+              
+              {/* Customer Features (if present) */}
+              {proj.customerFeatures && proj.customerFeatures.length > 0 && (
+                <div>
+                  <span className="text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold block mb-2">
+                    Customer Experience Features:
+                  </span>
+                  <ul className="flex flex-col gap-2 pl-1 text-[color:rgb(var(--g600))] text-xs">
+                    {proj.customerFeatures.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <span className="text-[color:rgb(var(--ink))] font-bold shrink-0">↳</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Admin & Operations Features (if present) */}
+              {proj.adminFeatures && proj.adminFeatures.length > 0 && (
+                <div>
+                  <span className="text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold block mb-2">
+                    Store Operations & Admin Management Features:
+                  </span>
+                  <ul className="flex flex-col gap-2 pl-1 text-[color:rgb(var(--g600))] text-xs">
+                    {proj.adminFeatures.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <span className="text-[color:rgb(var(--ink))] font-bold shrink-0">↳</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Key Features (for projects without separate customer/admin features) */}
+              {!proj.customerFeatures && proj.keyFeatures && proj.keyFeatures.length > 0 && (
+                <div>
+                  <span className="text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold block mb-2">
+                    Key Features & Architectural Highlights:
+                  </span>
+                  <ul className="flex flex-col gap-2 pl-1 text-[color:rgb(var(--g600))] text-xs">
+                    {proj.keyFeatures.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <span className="text-[color:rgb(var(--ink))] font-bold shrink-0">↳</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* System Preview & Interfaces Section */}
-              {proj.previews && proj.previews.length > 0 ? (
+              {proj.modules && proj.modules.length > 0 ? (
+                <div className="rounded-2xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g50))] p-4 sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-3 border-b border-[color:rgb(var(--g200))]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold font-mono">
+                        System Modules & Visual Interfaces ({proj.modules.flatMap((m) => m.screenshots || []).length})
+                      </span>
+                    </div>
+                    <span className="font-mono text-[10px] text-[color:rgb(var(--g500))]">
+                      Click image for fullscreen view 🔍
+                    </span>
+                  </div>
+
+                  {/* Module Tabs Selector */}
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setProjectModuleTab(proj.title, "all")}
+                      className={`px-3 py-1 rounded-lg font-mono text-xs transition-all cursor-pointer ${
+                        (activeModuleTabs[proj.title] || "all") === "all"
+                          ? "bg-[color:rgb(var(--ink))] text-[color:rgb(var(--bg))] font-medium shadow-sm"
+                          : "bg-[color:rgb(var(--bg))] border border-[color:rgb(var(--g200))] text-[color:rgb(var(--g600))] hover:border-[color:rgb(var(--g400))]"
+                      }`}
+                    >
+                      All Modules ({proj.modules.flatMap((m) => m.screenshots || []).length})
+                    </button>
+                    {proj.modules.map((mod) => (
+                      <button
+                        key={mod.id}
+                        type="button"
+                        onClick={() => setProjectModuleTab(proj.title, mod.id)}
+                        className={`px-3 py-1 rounded-lg font-mono text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
+                          (activeModuleTabs[proj.title] || "all") === mod.id
+                            ? "bg-[color:rgb(var(--ink))] text-[color:rgb(var(--bg))] font-medium shadow-sm"
+                            : "bg-[color:rgb(var(--bg))] border border-[color:rgb(var(--g200))] text-[color:rgb(var(--g600))] hover:border-[color:rgb(var(--g400))]"
+                        }`}
+                      >
+                        <span>{mod.name.split(". ")[1] || mod.name}</span>
+                        <span
+                          className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                            (activeModuleTabs[proj.title] || "all") === mod.id
+                              ? "bg-white/20 text-white"
+                              : "bg-[color:rgb(var(--g100))] text-[color:rgb(var(--g600))]"
+                          }`}
+                        >
+                          {mod.screenshots ? mod.screenshots.length : 0}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Filtered Modules Display: 1-Card-Per-Module in 'All' View, Expanded Grid in Single-Module View */}
+                  {(activeModuleTabs[proj.title] || "all") === "all" ? (
+                    /* Compact 2-Column Module Album Cards */
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {proj.modules.map((mod, mIdx) => {
+                        const screens = mod.screenshots || [];
+                        const cover = screens[0];
+
+                        return (
+                          <div
+                            key={mod.id || mIdx}
+                            className="group/modCard rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--bg))] p-4 shadow-sm hover:shadow-md hover:border-[color:rgb(var(--g400))] transition-all flex flex-col justify-between"
+                          >
+                            <div>
+                              {/* Module Header */}
+                              <div className="flex items-start justify-between gap-2 mb-2">
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-mono text-[10px] text-[color:rgb(var(--g400))] font-semibold">
+                                      MOD 0{mIdx + 1}
+                                    </span>
+                                    {mod.badge && (
+                                      <span className="rounded bg-[color:rgb(var(--g100))] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[color:rgb(var(--g600))] font-medium">
+                                        {mod.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h3 className="font-['Geist_Pixel'] text-sm text-[color:rgb(var(--ink))] mt-0.5 leading-snug">
+                                    {mod.name.split(". ")[1] || mod.name}
+                                  </h3>
+                                </div>
+                                <span className="shrink-0 font-mono text-[10px] bg-[color:rgb(var(--ink))] text-[color:rgb(var(--bg))] px-2 py-0.5 rounded-full font-medium shadow-2xs">
+                                  {screens.length} Screen{screens.length > 1 ? "s" : ""}
+                                </span>
+                              </div>
+
+                              {mod.summary && (
+                                <p className="text-xs text-[color:rgb(var(--g600))] mb-3 line-clamp-2 leading-relaxed font-sans">
+                                  {mod.summary}
+                                </p>
+                              )}
+
+                              {/* Hero Cover Image */}
+                              {cover && (
+                                <button
+                                  type="button"
+                                  onClick={() => openLightbox(screens, 0)}
+                                  className="relative w-full aspect-video overflow-hidden rounded-lg border border-[color:rgb(var(--g200))] bg-black/5 cursor-pointer group/cover block text-left"
+                                  title="Click to browse module album in high resolution"
+                                >
+                                  <img
+                                    src={cover.src}
+                                    alt={cover.title}
+                                    className="h-full w-full object-cover object-top transition-transform duration-500 group-hover/cover:scale-105"
+                                  />
+
+                                  {/* Hover Badge */}
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/cover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-mono gap-1.5 backdrop-blur-2xs">
+                                    <span>📸 Open {screens.length} Screens Album</span>
+                                    <span>↗</span>
+                                  </div>
+
+                                  {/* Bottom caption overlay */}
+                                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 pt-4 text-white">
+                                    <div className="font-['Geist_Pixel'] text-[11px] truncate">
+                                      {cover.title}
+                                    </div>
+                                  </div>
+                                </button>
+                              )}
+
+                              {/* Mini Thumbnail Stack (if multiple screens) */}
+                              {screens.length > 1 && (
+                                <div className="grid grid-cols-4 gap-1.5 mt-2">
+                                  {screens.slice(0, 4).map((s, sIdx) => {
+                                    const isFourth = sIdx === 3;
+                                    const extra = screens.length - 4;
+
+                                    return (
+                                      <button
+                                        key={sIdx}
+                                        type="button"
+                                        onClick={() => openLightbox(screens, sIdx)}
+                                        className="relative aspect-video rounded overflow-hidden border border-[color:rgb(var(--g200))] hover:border-[color:rgb(var(--ink))] transition-all cursor-pointer bg-black/5"
+                                        title={s.title}
+                                      >
+                                        <img
+                                          src={s.src}
+                                          alt={s.title}
+                                          className="h-full w-full object-cover object-top"
+                                        />
+                                        {isFourth && extra > 0 && (
+                                          <div className="absolute inset-0 bg-black/75 text-white font-mono text-[10px] font-bold flex items-center justify-center backdrop-blur-2xs">
+                                            +{extra}
+                                          </div>
+                                        )}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Footer Action */}
+                            <div className="mt-3 pt-2.5 border-t border-[color:rgb(var(--g100))] flex items-center justify-between">
+                              <button
+                                type="button"
+                                onClick={() => openLightbox(screens, 0)}
+                                className="font-mono text-[11px] text-[color:rgb(var(--ink))] hover:underline flex items-center gap-1 cursor-pointer font-medium"
+                              >
+                                <span>View All ({screens.length})</span>
+                                <span>↗</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setProjectModuleTab(proj.title, mod.id)}
+                                className="font-mono text-[10px] text-[color:rgb(var(--g500))] hover:text-[color:rgb(var(--ink))] px-2 py-0.5 rounded border border-[color:rgb(var(--g200))] hover:border-[color:rgb(var(--g400))] transition-colors cursor-pointer"
+                              >
+                                Filter Module
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    /* Expanded View for Single Selected Module */
+                    <div className="flex flex-col gap-4">
+                      {proj.modules
+                        .filter((mod) => (activeModuleTabs[proj.title] || "all") === mod.id)
+                        .map((mod, mIdx) => (
+                          <div
+                            key={mod.id || mIdx}
+                            className="rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--bg))] p-4 shadow-sm"
+                          >
+                            {/* Module Header */}
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-[color:rgb(var(--g100))]">
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-['Geist_Pixel'] text-sm text-[color:rgb(var(--ink))]">
+                                  {mod.name}
+                                </h3>
+                                {mod.badge && (
+                                  <span className="rounded bg-[color:rgb(var(--g100))] px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[color:rgb(var(--g600))] font-medium">
+                                    {mod.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-[10px] text-[color:rgb(var(--g400))]">
+                                  {mod.screenshots ? mod.screenshots.length : 0} screen
+                                  {mod.screenshots && mod.screenshots.length > 1 ? "s" : ""}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setProjectModuleTab(proj.title, "all")}
+                                  className="font-mono text-[10px] text-[color:rgb(var(--ink))] underline cursor-pointer"
+                                >
+                                  Show All Modules ↩
+                                </button>
+                              </div>
+                            </div>
+
+                            {mod.summary && (
+                              <p className="text-xs text-[color:rgb(var(--g600))] mb-3.5 leading-relaxed font-sans">
+                                {mod.summary}
+                              </p>
+                            )}
+
+                            {/* Screenshots Grid for Single Module */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                              {mod.screenshots &&
+                                mod.screenshots.map((preview, pIdx) => (
+                                  <button
+                                    key={pIdx}
+                                    type="button"
+                                    onClick={() => openLightbox(mod.screenshots, pIdx)}
+                                    className="group/img relative flex flex-col text-left overflow-hidden rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g100))] hover:border-[color:rgb(var(--g400))] hover:shadow-lg transition-all cursor-pointer"
+                                  >
+                                    <div className="relative aspect-video w-full overflow-hidden bg-black/5">
+                                      <img
+                                        src={preview.src}
+                                        alt={preview.title}
+                                        className="h-full w-full object-cover object-top transition-transform duration-300 group-hover/img:scale-105"
+                                      />
+                                      <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/img:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-mono gap-1.5">
+                                        <svg
+                                          className="h-4 w-4"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                          strokeWidth={2}
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                                          />
+                                        </svg>
+                                        Fullscreen
+                                      </div>
+                                    </div>
+                                    <div className="p-3 border-t border-[color:rgb(var(--g200))] bg-[color:rgb(var(--bg))] w-full">
+                                      <div className="font-['Geist_Pixel'] text-xs text-[color:rgb(var(--ink))] flex items-center justify-between">
+                                        <span>{preview.title}</span>
+                                        <span className="font-mono text-[10px] text-[color:rgb(var(--g400))] group-hover/img:text-[color:rgb(var(--ink))]">
+                                          ↗
+                                        </span>
+                                      </div>
+                                      {preview.caption && (
+                                        <p className="mt-1 font-mono text-[10px] text-[color:rgb(var(--g500))] line-clamp-2 leading-relaxed">
+                                          {preview.caption}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </button>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              ) : proj.previews && proj.previews.length > 0 ? (
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[11px] uppercase tracking-wider text-[color:rgb(var(--ink))] font-bold font-mono">
@@ -144,7 +478,7 @@ export default function ProjectsPage() {
                       <button
                         key={pIdx}
                         type="button"
-                        onClick={() => openLightbox(proj, pIdx)}
+                        onClick={() => openLightbox(proj.previews, pIdx)}
                         className="group/img relative flex flex-col text-left overflow-hidden rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g100))] hover:border-[color:rgb(var(--g400))] hover:shadow-lg transition-all cursor-pointer"
                       >
                         <div className="relative aspect-video w-full overflow-hidden bg-black/5">
@@ -214,19 +548,6 @@ export default function ProjectsPage() {
                   Visit Live Demo ↗
                 </a>
               )}
-              {proj.title.toLowerCase().includes("bakas") && (
-                <button
-                  type="button"
-                  onClick={() => setIsSimulatorOpen(true)}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-mono border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded hover:bg-emerald-500/20 transition-all cursor-pointer"
-                >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  📱 Launch Mobile Simulator ➔
-                </button>
-              )}
               {proj.githubUrl && proj.githubUrl !== "#" && (
                 <a
                   href={proj.githubUrl}
@@ -244,11 +565,6 @@ export default function ProjectsPage() {
           </article>
         ))}
       </div>
-
-      {/* Bakas Mobile Simulator Modal */}
-      {isSimulatorOpen && (
-        <MobileSimulator onClose={() => setIsSimulatorOpen(false)} />
-      )}
 
       {/* Lightbox Modal */}
       <ImageModal

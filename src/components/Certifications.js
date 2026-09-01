@@ -1,9 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { portfolioData } from "../data/portfolio";
 
 export default function Certifications({ sectionRef }) {
+  const [lightboxImg, setLightboxImg] = useState(null);
+
+  const closeLightbox = useCallback(() => setLightboxImg(null), []);
+
+  useEffect(() => {
+    if (!lightboxImg) return;
+    const handleKey = (e) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [lightboxImg, closeLightbox]);
+
   return (
     <section id="certifications" ref={sectionRef} className="py-12 scroll-mt-6">
       <div className="mb-6 flex items-baseline justify-between">
@@ -17,41 +34,53 @@ export default function Certifications({ sectionRef }) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {portfolioData.certifications.map((cert, idx) => (
-          <a
+          <button
             key={idx}
-            href={cert.verifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex items-center gap-4 rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--bg))] p-4.5 transition-all hover:border-[color:rgb(var(--g400))] hover:shadow-sm"
+            type="button"
+            onClick={() => setLightboxImg(cert.logoUrl)}
+            className="group relative flex items-center gap-4 rounded-xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--bg))] p-4.5 transition-all hover:border-[color:rgb(var(--g400))] hover:shadow-sm text-left cursor-pointer"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g50))] p-2">
-              <img
-                src={cert.logoUrl}
-                alt=""
-                className="h-full w-full object-contain"
-              />
-            </div>
-
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-[color:rgb(var(--g500))]">
                   {cert.issuer}
                 </span>
-                <span className="inline-flex items-center text-[9px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">
-                  ✓ Verified
-                </span>
               </div>
-              <h3 className="mt-1 text-sm font-semibold text-[color:rgb(var(--ink))] group-hover:text-[color:rgb(var(--ink))] truncate">
+              <h3 className="mt-1 text-sm font-semibold text-[color:rgb(var(--ink))] truncate">
                 {cert.title}
               </h3>
             </div>
 
-            <div className="shrink-0 font-mono text-xs text-[color:rgb(var(--g400))] group-hover:text-[color:rgb(var(--ink))] transition-colors">
-              ↗
+            <div className="shrink-0 font-mono text-[10px] text-[color:rgb(var(--g400))] group-hover:text-[color:rgb(var(--ink))] transition-colors">
+              View ↗
             </div>
-          </a>
+          </button>
         ))}
       </div>
+
+      {/* Certificate Lightbox */}
+      {lightboxImg && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 backdrop-blur-sm cursor-pointer"
+          onClick={closeLightbox}
+        >
+          <button
+            type="button"
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 z-10 flex items-center justify-center h-10 w-10 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors cursor-pointer backdrop-blur-md"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+
+          <img
+            src={lightboxImg}
+            alt="Certificate Full View"
+            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </section>
   );
 }

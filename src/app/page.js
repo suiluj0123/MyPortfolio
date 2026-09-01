@@ -130,11 +130,10 @@ export default function Home() {
                 <button
                   key={sec.id}
                   onClick={() => scrollToSection(sec.id)}
-                  className={`text-left cursor-pointer transition-all duration-200 flex items-center justify-between px-2.5 py-1.5 rounded-lg ${
-                    isActive
-                      ? "bg-[color:rgb(var(--g100))] text-[color:rgb(var(--ink))] font-medium translate-x-1"
-                      : "text-[color:rgb(var(--g500))] hover:text-[color:rgb(var(--ink))] hover:bg-[color:rgb(var(--g50))]"
-                  }`}
+                  className={`text-left cursor-pointer transition-all duration-200 flex items-center justify-between px-2.5 py-1.5 rounded-lg ${isActive
+                    ? "bg-[color:rgb(var(--g100))] text-[color:rgb(var(--ink))] font-medium translate-x-1"
+                    : "text-[color:rgb(var(--g500))] hover:text-[color:rgb(var(--ink))] hover:bg-[color:rgb(var(--g50))]"
+                    }`}
                 >
                   <div className="flex items-center gap-2">
                     <span className={`h-1.5 w-1.5 rounded-full transition-all ${isActive ? "bg-[color:rgb(var(--ink))]" : "bg-transparent"}`} />
@@ -236,9 +235,8 @@ export default function Home() {
               <button
                 key={sec.id}
                 onClick={() => scrollToSection(sec.id)}
-                className={`text-left cursor-pointer ${
-                  activeSection === sec.id ? "text-[color:rgb(var(--ink))] font-medium" : "text-[color:rgb(var(--g500))]"
-                }`}
+                className={`text-left cursor-pointer ${activeSection === sec.id ? "text-[color:rgb(var(--ink))] font-medium" : "text-[color:rgb(var(--g500))]"
+                  }`}
               >
                 {sec.label}
               </button>
@@ -250,20 +248,13 @@ export default function Home() {
       {/* Main Content Layout Container */}
       <main id="top" className="relative z-10 lg:pl-56">
         <div className="mx-auto max-w-2xl px-6">
-          
+
           {/* Profile Hero Section */}
           <section className="relative pt-14 pb-12 sm:pt-20">
-            {/* Status Pill Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 font-mono text-[11px] text-emerald-600 dark:text-emerald-400">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span>Available for Full-Stack & Generative AI Roles</span>
-            </div>
+
 
             <div className="grid gap-8 sm:grid-cols-[14rem_1fr] sm:items-start sm:gap-10">
-              
+
               {/* Profile Image Container with subtle ring */}
               <div className="mx-auto w-full max-w-[14rem] sm:mx-0">
                 <div className="relative group aspect-square select-none overflow-hidden rounded-2xl border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--g50))] p-2 shadow-sm transition-all hover:shadow-md">
@@ -308,12 +299,6 @@ export default function Home() {
                   >
                     Explore Projects ↓
                   </button>
-                  <a
-                    href={`mailto:${portfolioData.profile.email}`}
-                    className="inline-flex items-center gap-2 rounded-lg border border-[color:rgb(var(--g200))] bg-[color:rgb(var(--bg))] px-4 py-2 font-mono text-xs text-[color:rgb(var(--ink))] hover:border-[color:rgb(var(--g400))] hover:bg-[color:rgb(var(--g50))] transition-all"
-                  >
-                    Get in Touch ✉
-                  </a>
                 </div>
 
                 {/* Social contact links */}
